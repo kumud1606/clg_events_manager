@@ -75,6 +75,7 @@ export default function CalendarPage() {
   const [now, setNow] = useState(() => new Date());
   const [registrations, setRegistrations] = useState(() => getEventRegistrations());
   const [activeMonth, setActiveMonth] = useState(() => new Date(new Date().getFullYear(), new Date().getMonth(), 1));
+  const currentMonthIndex = now.getMonth();
 
   useEffect(() => {
     const intervalId = window.setInterval(() => {
@@ -121,24 +122,33 @@ export default function CalendarPage() {
             </div>
 
             <div className="calendar-board__controls">
-              <label className="calendar-board__month-picker">
+              <div className="calendar-board__month-picker">
                 <span className="calendar-board__month-icon" aria-hidden="true">
                   Month
                 </span>
-                <select
-                  className="calendar-board__month-select"
-                  value={activeMonth.getMonth()}
-                  onChange={(event) =>
-                    setActiveMonth(new Date(activeMonth.getFullYear(), Number(event.target.value), 1))
-                  }
-                >
-                  {MONTH_OPTIONS.map((month) => (
-                    <option key={month.value} value={month.value}>
-                      {month.label}
-                    </option>
-                  ))}
-                </select>
-              </label>
+                <div className="calendar-board__month-scroller" role="tablist" aria-label="Select month">
+                  {MONTH_OPTIONS.map((month) => {
+                    const isActive = month.value === activeMonth.getMonth();
+                    const isCurrentMonth = month.value === currentMonthIndex;
+
+                    return (
+                      <button
+                        key={month.value}
+                        type="button"
+                        role="tab"
+                        aria-selected={isActive}
+                        className={`calendar-board__month-chip ${isActive ? "calendar-board__month-chip--active" : ""} ${
+                          isCurrentMonth ? "calendar-board__month-chip--current" : ""
+                        }`}
+                        onClick={() => setActiveMonth(new Date(activeMonth.getFullYear(), month.value, 1))}
+                      >
+                        <span>{month.label}</span>
+                        {isCurrentMonth ? <small>This month</small> : null}
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
             </div>
           </div>
 
@@ -183,6 +193,7 @@ export default function CalendarPage() {
                     className={`calendar-grid__date ${tone ? `calendar-grid__date--${tone}` : ""}`}
                     tabIndex={dayEvents.length > 0 ? 0 : -1}
                   >
+                    {isToday ? <span className="calendar-grid__today-badge">Today</span> : null}
                     {date.getDate()}
                     {dayEvents.length > 0 ? (
                       <div className="calendar-grid__tooltip">

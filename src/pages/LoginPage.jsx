@@ -32,7 +32,7 @@ export default function LoginPage() {
   function handleSubmit(event) {
     event.preventDefault();
 
-    if (form.captcha.trim().toUpperCase() !== captchaText) {
+    if (form.captcha.trim() !== captchaText) {
       setError("Captcha does not match. Please try again.");
       refreshCaptcha();
       return;
