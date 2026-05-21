@@ -2,16 +2,6 @@
 
 This is a React + Vite frontend for a college clubs website project.
 
-## Included pages
-
-- Login page styled like a college ERP portal
-- First-time club selection page
-- Clubs and events feed page with:
-  - `All Clubs`
-  - `My Clubs`
-  - individual club filters
-  - update option for `My Clubs`
-
 ## Project structure
 
 - `src/pages/LoginPage.jsx`
